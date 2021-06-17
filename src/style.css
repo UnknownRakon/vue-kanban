@@ -1,0 +1,77 @@
+.theme-light {
+    --color-primary: #F7FFF7;
+    --color-secondary: #FFE66D;
+    --color-accent: #FF6B6B;
+    --font-color: #1A535C;
+    --one: #D7D8C9;
+    --two: #A4A68A;
+    --four: #D94C1A;
+}
+
+.theme-dark {
+    --color-primary: #1A535C;
+    --color-secondary: #4ECDC4;
+    --color-accent: #FFE66D;
+    --font-color: #F7FFF7;
+    --one: #D9B95B;
+    --two: #F2AC57;
+    --four: #732002;
+}
+body{
+    background-color: var(--color-primary) !important;
+    overflow-x: visible !important;
+}
+header{
+    display: flex;
+    flex-direction: row;
+    justify-items: flex-start;
+    align-items: center;
+    height: 100px;
+    background-color: none;
+  }
+  header img{
+    height: 80%;
+    width: auto;
+  }
+h1{
+    color: var(--font-color);
+    margin-left: 5%;
+}
+.button{
+    background-color: var(--color-accent) !important;
+    border: none !important;
+    outline: none !important;
+    margin-left: 61%;
+    color: var(--font-color) !important;
+}
+
+.backlog{
+    background-color: var(--one) !important;
+    border: none !important;
+}
+.inprog{
+    background-color: var(--two) !important;
+    border: none !important;
+}
+.done{
+    background-color: var(--four) !important;
+    border: none !important;
+}
+.left{
+    justify-self: flex-start !important;
+}
+.right{
+    justify-self: flex-end !important;
+}
+footer{
+    background-color: var(--color-accent);
+    color: var(--font-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    font-size: 1.2em;
+}
+#app{
+    margin-bottom: 100px !important;
+}
