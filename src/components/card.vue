@@ -2,13 +2,13 @@
           <draggable class="list-group kanban-column" :list='arr' group='tasks'>
             <b-card no-body class="mb-1"  v-for="(elements, index) in arr" :key="elements">
               <b-card-header header-tag="header" role="tab">
-                  <b-button v-if="elements.level==1" class="col-12" block v-b-toggle.accordion-1 variant="info">{{elements.name}}</b-button>
-                  <b-button v-if="elements.level==2" class="col-12" block v-b-toggle.accordion-1 variant="warning">{{elements.name}}</b-button>
-                  <b-button v-if="elements.level==3" class="col-12" block v-b-toggle.accordion-1 variant="danger">{{elements.name}}</b-button>
+                  <b-button v-if="elements.level==1" class="col-12" block v-b-toggle='naming(elements.number)' variant="info">{{elements.name}}</b-button>
+                  <b-button v-if="elements.level==2" class="col-12" block v-b-toggle='naming(elements.number)' variant="warning">{{elements.name}}</b-button>
+                  <b-button v-if="elements.level==3" class="col-12" block v-b-toggle='naming(elements.number)' variant="danger">{{elements.name}}</b-button>
               </b-card-header>
-              <b-collapse visible id="accordion-1" accordion="my-accordion" role="tabpanel">
+              <b-collapse visible v-bind:id='naming(elements.number)' accordion="my-accordion" role="tabpanel">
                   <b-card-body>
-                  <h2 class="text-center">Задача № : {{index+1}}</h2>
+                  <h2 class="text-center">Задача № : {{elements.number}}</h2>
                   <h3 class="text-center">Описание:</h3>                     
                   <b-card-text>{{elements.description}}</b-card-text>              
                   <b-card-text>Приоритет : {{elements.level}}</b-card-text>
@@ -16,15 +16,16 @@
                   <div class="row mx-auto">
                         <b-button v-bind:disabled="namearr == 'backlog'" class="col-4" variant="primary" @click="left(index, elements)">Лево</b-button>
                         <b-button class="col-4" variant="primary" @click="openView(elements.name, elements.level, elements.date, elements.description)">Изменить</b-button>
-                        <b-button v-bind:disabled="namearr == 'done'" class="col-4" variant="primary" @click="right(index, elements)">Право</b-button>
+                        <b-button v-if = "namearr != 'done'" class="col-4" variant="primary" @click="right(index, elements)">Право</b-button>
+                        <b-button v-else class="col-4" variant="primary" @click="del(index, arr)">Удалить</b-button>
                   </div>
                   </b-card-body>
               </b-collapse>
               <vue-modaltor :visible="open" @hide="open=false" bg-overlay="green">
                 <template #header>
-                  <div class="row py-4">
-                    <h1 class="col-10 text-center">Изменить карточку</h1>
-                    <p class="h1 mb-2 col-1"><b-icon-x-circle @click="reset"></b-icon-x-circle></p>
+                  <div class="col-12 row pt-3">
+                    <b-icon-x-circle @click="reset" class="h1"></b-icon-x-circle>
+                    <h2 class="text-center">Изменить карточку</h2>
                   </div>
                 </template>
                 <template #body>
@@ -48,8 +49,10 @@
                         :options="levels"
                         required
                       ></b-form-select>
-                      <b-button @click="open=false" type="submit" variant="primary" class="col-2">Изменить</b-button>
-                      <b-button type="reset" variant="danger" class="ml-2 col-2">Сбросить</b-button>
+                      <div class="row pt-3">
+                      <b-button @click="open=false" type="submit" variant="primary" class="mx-auto col-2">Изменить</b-button>
+                      <b-button type="reset" variant="danger" class="mx-auto col-2">Сбросить</b-button>
+                      </div>
                     </b-form>
                     </div>
                   </template>
@@ -71,6 +74,7 @@ export default {
     left: Function,
     namearr: String,
     edit: Function,
+    del: Function
   },
   data(){
     return{
@@ -99,6 +103,10 @@ export default {
       this.editTask.date = date
       this.editTask.description = description
       this.open = false
+    },
+    naming(index){
+      let naming = 'accordion-' + index
+      return naming
     }
     }
 }

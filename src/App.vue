@@ -8,14 +8,14 @@
     <b-button class="col-12" variant="primary" @click="open=true">Создать</b-button>
     <vue-modaltor :visible="open" @hide="open=false" bg-overlay="green">
       <template #header>
-        <div class="row py-4">
-          <h1 class="col-10 text-center">Добавьте новую карточку</h1>
-          <p class="h1 mb-2 col-1"><b-icon-x-circle @click="reset"></b-icon-x-circle></p>
-        </div>
+      <div class="col-12 row pt-3">
+        <b-icon-x-circle @click="reset" class="h1"></b-icon-x-circle>
+        <h2 class="text-center">Добавьте новую карточку</h2>
+      </div>
       </template>
       <template #body>
-          <div class="col-11 mx-auto">
-          <b-form @submit="add" @reset="reset" class="mb-5">
+          <div class="col-12 px-3">
+          <b-form @submit="add" @reset="reset" class="mb-5 py-2">
             <b-form-input
               id="input-1"
               v-model="newTask.name"
@@ -34,8 +34,10 @@
               :options="levels"
               required
             ></b-form-select>
-            <b-button type="submit" variant="primary" class="col-2">Добавить</b-button>
-            <b-button type="reset" variant="danger" class="ml-2 col-2">Сбросить</b-button>
+            <div class="row pt-3">
+            <b-button type="submit" variant="primary" class="mx-auto col-2">Добавить</b-button>
+            <b-button type="reset" variant="danger" class="mx-auto col-2">Сбросить</b-button>
+            </div>
           </b-form>
           </div>
         </template>
@@ -44,21 +46,21 @@
       <div class="col-md-4">
         <div class="p-2 alert alert-secondary backlog">
           <h3 class="text-center">БЭКЛОГ --- {{arrBacklog.length}}</h3>
-          <card v-bind:edit="edit" v-bind:left="leftOne" v-bind:right="rightOne"  namearr='backlog' v-bind:arr="arrBacklog"></card>
+          <card v-bind:del="del" v-bind:edit="edit" v-bind:left="leftOne" v-bind:right="rightOne"  namearr='backlog' v-bind:arr="arrBacklog"></card>
         </div>
       </div>
 
       <div class="col-md-4">
         <div class="p-2 alert alert-primary inprog">
           <h3 class="text-center">В ПРОГРЕССЕ --- {{arrInProgress.length}}</h3>
-          <card v-bind:edit="edit" v-bind:left="leftOne" v-bind:right="rightTwo" namearr='progress' v-bind:arr="arrInProgress"></card>
+          <card v-bind:del="del" v-bind:edit="edit" v-bind:left="leftOne" v-bind:right="rightTwo" namearr='progress' v-bind:arr="arrInProgress"></card>
         </div>
       </div>
 
       <div class="col-md-4">
         <div class="p-2 alert alert-success done">
           <h3 class="text-center">СДЕЛАЛИ!!! --- {{arrDone.length}}</h3>
-          <card v-bind:edit="edit" v-bind:left="leftTwo" v-bind:right="rightTwo" namearr='done' v-bind:arr="arrDone"></card>
+          <card v-bind:del="del" v-bind:edit="edit" v-bind:left="leftTwo" v-bind:right="rightTwo" namearr='done' v-bind:arr="arrDone"></card>
         </div>
       </div>
     </div>
@@ -82,14 +84,16 @@ export default {
    data(){
     return{
       levels: [1, 2, 3],
+      amount : 1,
       newTask: {
         name: null,
         date: null,
         level: 1,
+        number: null,
         description: null
       },
       arrBacklog: [
-        {name: 'Test 1', date: '12.11.2002', level: 1, description: 'test-card'}
+        {name: 'Test 1', date: '12.11.2002', level: 1, description: 'test-card', number: 1}
         ],
       arrInProgress:[],
       arrDone:[],
@@ -100,7 +104,8 @@ export default {
     add(event){
       event.preventDefault()
       if (this.newTask){
-        this.arrBacklog.push({name: this.newTask.name, level: this.newTask.level, description: this.newTask.description, date: this.makeCalculate()});
+        this.amount++
+        this.arrBacklog.push({name: this.newTask.name, level: this.newTask.level, number: this.amount, description: this.newTask.description, date: this.makeCalculate()});
         this.newTask = {};
         this.open = false
       }
@@ -161,6 +166,9 @@ export default {
       leftTwo(index, element){
         this.arrDone.splice(index, 1),
         this.arrInProgress.push(element)
+      },
+      del(index, arr){
+        arr.splice(index, 1);
       }
   }  
 }
